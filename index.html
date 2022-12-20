@@ -230,38 +230,20 @@ const matchups = [{
 
 let highlight = null;
 
-document.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-
-  if (highlight !== null) {
-    let matching = document.querySelectorAll(`.attacker-${highlight.attacker}, .defender-${highlight.defender}`);
-    matching.forEach((el) => {
-      el.classList.remove('related', 'selected');
-    });
-    highlight = null;
-  }
-});
-
-function highlightAll(cell, selector) {
+function highlightRelated(selector) {
   if (highlight === null) {
     let matching = document.querySelectorAll(selector);
     matching.forEach((el) => {
       el.classList.add('related');
     });
-
-    cell.classList.add('selected');
   }
 }
 
-function unhighlightAll(cell, selector) {
-  if (highlight === null) {
-    let matching = document.querySelectorAll(selector);
-    matching.forEach((el) => {
-      el.classList.remove('related');
-    });
-
-    cell.classList.remove('selected');
-  }
+function unhighlightRelated(selector) {
+  let matching = document.querySelectorAll(selector);
+  matching.forEach((el) => {
+    el.classList.remove('related', 'selected');
+  });
 }
 
 function freezeHighlights(cell, selector, types) {
@@ -281,13 +263,27 @@ function generateDefenders() {
   let elParent = document.querySelector('#defenders>.labels');
 
   matchups.forEach((defender) => {
+    let classList = `defender-${defender.type}`;
+    let selector = `.defender-${defender.type}`;
+
     let newCell = document.createElement('div');
-    newCell.className = `defender-${defender.type}`;
+    newCell.className = classList;
     newCell.innerHTML = defender.type;
 
-    newCell.addEventListener('mouseover', (e) => highlightAll(newCell, `.defender-${defender.type}`));
-    newCell.addEventListener('mouseout', (e) => unhighlightAll(newCell, `.defender-${defender.type}`));
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, `.defender-${defender.type}`, { defender: defender.type }));
+    newCell.addEventListener('mouseover', (e) => {
+      if (highlight === null) {
+        highlightRelated(selector);
+        newCell.classList.add('selected');
+      }
+    });
+
+    newCell.addEventListener('mouseout', (e) => {
+      if (highlight === null) {
+        unhighlightRelated(selector);
+      }
+    });
+
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, selector, { defender: defender.type }));
 
     elParent.appendChild(newCell);
   });
@@ -297,13 +293,27 @@ function generateAttackers() {
   let elParent = document.querySelector('#attackers>.labels');
 
   matchups.forEach((attacker) => {
+    let classList = `attacker-${attacker.type}`;
+    let selector = `.attacker-${attacker.type}`;
+
     let newCell = document.createElement('div');
-    newCell.className = `attacker-${attacker.type}`;
+    newCell.className = classList;
     newCell.innerHTML = attacker.type;
 
-    newCell.addEventListener('mouseover', (e) => highlightAll(newCell, `.attacker-${attacker.type}`));
-    newCell.addEventListener('mouseout', (e) => unhighlightAll(newCell, `.attacker-${attacker.type}`));
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, `.attacker-${attacker.type}`, { attacker: attacker.type }));
+    newCell.addEventListener('mouseover', (e) => {
+      if (highlight === null) {
+        highlightRelated(selector);
+        newCell.classList.add('selected');
+      }
+    });
+
+    newCell.addEventListener('mouseout', (e) => {
+      if (highlight === null) {
+        unhighlightRelated(selector);
+      }
+    });
+
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, selector, { attacker: attacker.type }));
 
     elParent.appendChild(newCell);
   });
@@ -314,18 +324,41 @@ function generateGrid() {
 
   matchups.forEach((attacker) => {
     matchups.forEach((defender) => {
+      let classList = `attacker-${attacker.type} defender-${defender.type}`;
+      let selector = `.attacker-${attacker.type}, .defender-${defender.type}`;
+
       let newCell = document.createElement('div');
-      newCell.className = `cell attacker-${attacker.type} defender-${defender.type}`;
+      newCell.className = `cell ${classList}`;
       newCell.innerHTML = 'X';
 
-    newCell.addEventListener('mouseover', (e) => highlightAll(newCell, `.attacker-${attacker.type}, .defender-${defender.type}`));
-    newCell.addEventListener('mouseout', (e) => unhighlightAll(newCell, `.attacker-${attacker.type}, .defender-${defender.type}`));
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, `.attacker-${attacker.type}, .defender-${defender.type}`, { attacker: attacker.type, defender: defender.type }));
+      newCell.addEventListener('mouseover', (e) => {
+        if (highlight === null) {
+          highlightRelated(selector);
+          newCell.classList.add('selected');
+        }
+      });
+
+      newCell.addEventListener('mouseout', (e) => {
+        if (highlight === null) {
+          unhighlightRelated(selector);
+        }
+      });
+
+      newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, selector, { attacker: attacker.type, defender: defender.type }));
 
       elParent.appendChild(newCell);
     });
   });
 }
+
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+
+  if (highlight !== null) {
+    unhighlightRelated(`.attacker-${highlight.attacker}, .defender-${highlight.defender}`);
+    highlight = null;
+  }
+});
 </script>
 <div id="main">
   <div class="title">

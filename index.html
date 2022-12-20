@@ -272,10 +272,8 @@ function unhighlightRelated() {
 }
 
 function freezeHighlights(attacker, defender) {
-  if (!highlight) {
-    highlightRelated(attacker, defender);
-    highlight = { attacker: attacker, defender: defender };
-  }
+  highlightRelated(attacker, defender);
+  highlight = true;
 }
 
 function unfreezeHighlights() {
@@ -361,15 +359,15 @@ function generateGrid() {
 
       let newCell = document.createElement('div');
       newCell.className = `cell ${classList}`;
-      
-      if(defender.immuneTo.indexOf(attacker.type) > -1) {
+
+      if (defender.immuneTo.indexOf(attacker.type) > -1) {
         newCell.innerHTML = 'X';
-      } else if(defender.resistTo.indexOf(attacker.type) > -1) {
+      } else if (defender.resistTo.indexOf(attacker.type) > -1) {
         newCell.innerHTML = '/';
-      } else if(defender.weakTo.indexOf(attacker.type) > -1) {
+      } else if (defender.weakTo.indexOf(attacker.type) > -1) {
         newCell.innerHTML = 'O';
       } else {
-        
+
       }
 
       newCell.addEventListener('mouseover', (e) => {
@@ -435,8 +433,8 @@ document.addEventListener('contextmenu', (e) => {
     </div>
   </div>
   <div>
-    <b>Hover</b> over types/matchups to highlight.
-    <b>Left click</b> to freeze highlights.
-    <b>Right click</b> to unfreeze highlights.
+    <b>Hover</b> over types/matchups to highlight -
+    <b>Left click</b> to freeze highlights (You can have multiple!) -
+    <b>Right click</b> to unfreeze highlights
   </div>
 </div>

@@ -10,7 +10,6 @@
     align-items: center;
     gap: 0.5em;
     
-/*    width: 50em;*/
     margin: auto;
     
     font-family: Verdana;
@@ -49,32 +48,59 @@
   
   #defenders {
     display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    grid-template-rows: 1;
-  }
-  
-  #defenders>div {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
     
-    padding: 1em 0em;
-    writing-mode: vertical-lr;
+    font-weight: bold;
   }
   
   #attackers {
     display: grid;
-    grid-template-columns: 1;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+    
+    font-weight: bold;
+  }
+  
+  #defenders>.header,
+  #attackers>.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1em;
+  }
+  
+  #attackers>.header {
+    writing-mode: vertical-lr;
+  }
+  
+  #defenders>.labels {
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-rows: 1fr;
+  }
+  
+  #attackers>.labels {
+    display: grid;
+    grid-template-columns: 1fr;
     grid-template-rows: repeat(18, 1fr);
   }
   
-  #attackers>div {
+  #defenders>.labels>div,
+  #attackers>.labels>div {
     display: flex;
     justify-content: center;
     align-items: flex-end;
     flex-direction: column;
+  }
     
+  #defenders>.labels>div {
+    padding: 1em 0em;
+    writing-mode: vertical-lr;
+  }
+  
+  #attackers>.labels>div {
     padding: 0em 1em;
   }
   
@@ -92,11 +118,9 @@
     align-items: center;
     flex-direction: column;
     
-/*    text-align: center;*/
-    
     aspect-ratio: 1 / 1;
     height: 2.5em;
-    outline: solid 1px #8d8d8d;
+    outline: solid 1px #a5a5a5;
   }
   
   .cell:hover {
@@ -201,8 +225,8 @@ const matchups = [{
 }];
 
 function generateDefenders() {
-  let elParent = document.getElementById('defenders');
-  
+  let elParent = document.querySelector('#defenders>.labels');
+
   matchups.forEach((el) => {
     let newCell = document.createElement('div');
     // newCell.className = 'cell';
@@ -212,8 +236,8 @@ function generateDefenders() {
 }
 
 function generateAttackers() {
-  let elParent = document.getElementById('attackers');
-  
+  let elParent = document.querySelector('#attackers>.labels');
+
   matchups.forEach((el) => {
     let newCell = document.createElement('div');
     // newCell.className = 'cell';
@@ -224,7 +248,7 @@ function generateAttackers() {
 
 function generateGrid() {
   let elParent = document.getElementById('grid');
-  
+
   matchups.forEach((el) => {
     matchups.forEach((el) => {
       let newCell = document.createElement('div');
@@ -234,9 +258,7 @@ function generateGrid() {
     });
   });
 }
-
 </script>
-
 <div id="main">
   <div class="title">
     Type Matchups
@@ -251,8 +273,26 @@ function generateGrid() {
   </div>
   <div class="grid-container">
     <div></div>
-    <div id="defenders"><script type="text/javascript">generateDefenders();</script></div>
-    <div id="attackers"><script type="text/javascript">generateAttackers();</script></div>
-    <div id="grid"><script type="text/javascript">generateGrid();</script></div>
+    <div id="defenders">
+      <div class="header"><span>Defender</span><span>Defender</span></div>
+      <div class="labels">
+        <script type="text/javascript">
+        generateDefenders();
+        </script>
+      </div>
+    </div>
+    <div id="attackers">
+      <div class="header"><span>Attacker</span><span>Attacker</span></div>
+      <div class="labels">
+        <script type="text/javascript">
+        generateAttackers();
+        </script>
+      </div>
+    </div>
+    <div id="grid">
+      <script type="text/javascript">
+      generateGrid();
+      </script>
+    </div>
   </div>
 </div>

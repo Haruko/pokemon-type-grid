@@ -123,8 +123,12 @@
     outline: solid 1px #a5a5a5;
   }
   
+  .related {
+    background-color: rgba(0, 200, 255, 0.25);
+  }
+  
   .selected {
-    background-color: rgba(255, 255, 0, 0.25);
+    background-color: rgba(0, 200, 255, 1.0);
   }
 </style>
 <script type="text/javascript">
@@ -224,6 +228,55 @@ const matchups = [{
   weakTo: ['Poison', 'Steel']
 }];
 
+let highlight = null;
+
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+
+  if (highlight !== null) {
+    let matching = document.querySelectorAll(`.attacker-${highlight.attacker}, .defender-${highlight.defender}`);
+    matching.forEach((el) => {
+      el.classList.remove('related', 'selected');
+    });
+    highlight = null;
+  }
+});
+
+function highlightAll(cell, selector) {
+  if (highlight === null) {
+    let matching = document.querySelectorAll(selector);
+    matching.forEach((el) => {
+      el.classList.add('related');
+    });
+
+    cell.classList.add('selected');
+  }
+}
+
+function unhighlightAll(cell, selector) {
+  if (highlight === null) {
+    let matching = document.querySelectorAll(selector);
+    matching.forEach((el) => {
+      el.classList.remove('related');
+    });
+
+    cell.classList.remove('selected');
+  }
+}
+
+function freezeHighlights(cell, selector, types) {
+  if (highlight === null) {
+    highlight = types;
+
+    let matching = document.querySelectorAll(selector);
+    matching.forEach((el) => {
+      el.classList.add('related');
+    });
+
+    cell.classList.add('selected');
+  }
+}
+
 function generateDefenders() {
   let elParent = document.querySelector('#defenders>.labels');
 
@@ -232,19 +285,9 @@ function generateDefenders() {
     newCell.className = `defender-${defender.type}`;
     newCell.innerHTML = defender.type;
 
-    newCell.addEventListener('mouseover', (e) => {
-      let matching = document.querySelectorAll(`.defender-${defender.type}`);
-      matching.forEach((el) => {
-        el.classList.add('selected');
-      });
-    });
-
-    newCell.addEventListener('mouseout', (e) => {
-      let matching = document.querySelectorAll(`.defender-${defender.type}`);
-      matching.forEach((el) => {
-        el.classList.remove('selected');
-      });
-    });
+    newCell.addEventListener('mouseover', (e) => highlightAll(newCell, `.defender-${defender.type}`));
+    newCell.addEventListener('mouseout', (e) => unhighlightAll(newCell, `.defender-${defender.type}`));
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, `.defender-${defender.type}`, { defender: defender.type }));
 
     elParent.appendChild(newCell);
   });
@@ -258,19 +301,9 @@ function generateAttackers() {
     newCell.className = `attacker-${attacker.type}`;
     newCell.innerHTML = attacker.type;
 
-    newCell.addEventListener('mouseover', (e) => {
-      let matching = document.querySelectorAll(`.attacker-${attacker.type}`);
-      matching.forEach((el) => {
-        el.classList.add('selected');
-      });
-    });
-
-    newCell.addEventListener('mouseout', (e) => {
-      let matching = document.querySelectorAll(`.attacker-${attacker.type}`);
-      matching.forEach((el) => {
-        el.classList.remove('selected');
-      });
-    });
+    newCell.addEventListener('mouseover', (e) => highlightAll(newCell, `.attacker-${attacker.type}`));
+    newCell.addEventListener('mouseout', (e) => unhighlightAll(newCell, `.attacker-${attacker.type}`));
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, `.attacker-${attacker.type}`, { attacker: attacker.type }));
 
     elParent.appendChild(newCell);
   });
@@ -285,19 +318,9 @@ function generateGrid() {
       newCell.className = `cell attacker-${attacker.type} defender-${defender.type}`;
       newCell.innerHTML = 'X';
 
-      newCell.addEventListener('mouseover', (e) => {
-        let matching = document.querySelectorAll(`.attacker-${attacker.type}, .defender-${defender.type}`);
-        matching.forEach((el) => {
-          el.classList.add('selected');
-        });
-      });
-
-      newCell.addEventListener('mouseout', (e) => {
-        let matching = document.querySelectorAll(`.attacker-${attacker.type}, .defender-${defender.type}`);
-        matching.forEach((el) => {
-          el.classList.remove('selected');
-        });
-      });
+    newCell.addEventListener('mouseover', (e) => highlightAll(newCell, `.attacker-${attacker.type}, .defender-${defender.type}`));
+    newCell.addEventListener('mouseout', (e) => unhighlightAll(newCell, `.attacker-${attacker.type}, .defender-${defender.type}`));
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, `.attacker-${attacker.type}, .defender-${defender.type}`, { attacker: attacker.type, defender: defender.type }));
 
       elParent.appendChild(newCell);
     });
@@ -339,5 +362,10 @@ function generateGrid() {
       generateGrid();
       </script>
     </div>
+  </div>
+  <div>
+    <b>Hover</b> over types/matchups to highlight.
+    <b>Left click</b> to freeze highlights.
+    <b>Right click</b> to unfreeze highlights.
   </div>
 </div>

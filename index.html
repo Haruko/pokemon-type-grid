@@ -1,8 +1,258 @@
+<style>
+  html {
+    background-color: #bdbdbd;
+    user-select: none;
+  }
+  
+  #main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    
+/*    width: 50em;*/
+    margin: auto;
+    
+    font-family: Verdana;
+    font-size: 1em;
+  }
+  
+  .title {
+    font-weight: bold;
+    font-size: 2em;
+  }
+  
+  
+  .subtitle {
+    font-weight: bold;
+    font-size: 1.25em;
+  }
+  
+  .legend {
+    display: flex;
+    flex-direction: row;
+    gap: 2.5em;
+    
+    font-weight: bold;
+    
+    margin-bottom: 1em;
+  }
+  
+  /* Grid */
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto 18fr;
+    grid-template-rows: auto 18fr;
+    
+    background-color: #9d9d9d;
+  }
+  
+  #defenders {
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-rows: 1;
+  }
+  
+  #defenders>div {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+    
+    padding: 1em 0em;
+    writing-mode: vertical-lr;
+  }
+  
+  #attackers {
+    display: grid;
+    grid-template-columns: 1;
+    grid-template-rows: repeat(18, 1fr);
+  }
+  
+  #attackers>div {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+    
+    padding: 0em 1em;
+  }
+  
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    
+    background-color: #adadad;
+  }
+  
+  .cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+/*    text-align: center;*/
+    
+    aspect-ratio: 1 / 1;
+    height: 2.5em;
+    outline: solid 1px #8d8d8d;
+  }
+  
+  .cell:hover {
+    background-color: rgba(255, 255, 0, 0.25);
+  }
+</style>
 <script type="text/javascript">
-  const test = 'test js';
+/*
+  Order: Normal Fire Water Electric Grass Ice Fighting Poison Ground Flying Psychic Bug Rock Ghost Dragon Dark Steel Fairy
+*/
+
+const matchups = [{
+  type: 'Normal',
+  immuneTo: ['Ghost'],
+  resistTo: [],
+  weakTo: ['Fighting']
+}, {
+  type: 'Fire',
+  immuneTo: [],
+  resistTo: ['Fire', 'Grass', 'Ice', 'Bug', 'Steel', 'Fairy'],
+  weakTo: ['Water', 'Ground', 'Rock']
+}, {
+  type: 'Water',
+  immuneTo: [],
+  resistTo: ['Fire', 'Water', 'Ice', 'Steel'],
+  weakTo: ['Electric', 'Grass']
+}, {
+  type: 'Electric',
+  immuneTo: [],
+  resistTo: ['Electric', 'Flying', 'Steel'],
+  weakTo: ['Ground']
+}, {
+  type: 'Grass',
+  immuneTo: [],
+  resistTo: ['Water', 'Electric', 'Grass', 'Ground'],
+  weakTo: ['Fire', 'Ice', 'Poison', 'Flying', 'Bug']
+}, {
+  type: 'Ice',
+  immuneTo: [],
+  resistTo: ['Ice'],
+  weakTo: ['Fire', 'Fighting', 'Rock', 'Steel']
+}, {
+  type: 'Fighting',
+  immuneTo: [],
+  resistTo: ['Bug', 'Rock', 'Dark'],
+  weakTo: ['Flying', 'Psychic', 'Fairy']
+}, {
+  type: 'Poison',
+  immuneTo: [],
+  resistTo: ['Grass', 'Fighting', 'Poison', 'Bug', 'Fairy'],
+  weakTo: ['Ground', 'Psychic']
+}, {
+  type: 'Ground',
+  immuneTo: ['Electric'],
+  resistTo: ['Poison', 'Rock'],
+  weakTo: ['Water', 'Grass', 'Ice']
+}, {
+  type: 'Flying',
+  immuneTo: ['Ground'],
+  resistTo: ['Grass', 'Fighting', 'Bug'],
+  weakTo: ['Electric', 'Ice', 'Rock']
+}, {
+  type: 'Psychic',
+  immuneTo: [],
+  resistTo: ['Fighting', 'Psychic'],
+  weakTo: ['Bug', 'Ghost', 'Dark']
+}, {
+  type: 'Bug',
+  immuneTo: [],
+  resistTo: ['Grass', 'Fighting', 'Ground'],
+  weakTo: ['Fire', 'Flying', 'Rock']
+}, {
+  type: 'Rock',
+  immuneTo: [],
+  resistTo: ['Normal', 'Fire', 'Poison', 'Flying'],
+  weakTo: ['Water', 'Grass', 'Fighting', 'Ground', 'Steel']
+}, {
+  type: 'Ghost',
+  immuneTo: ['Normal', 'Fighting'],
+  resistTo: ['Poison', 'Bug'],
+  weakTo: ['Ghost', 'Dark']
+}, {
+  type: 'Dragon',
+  immuneTo: [],
+  resistTo: ['Fire', 'Water', 'Electric', 'Grass'],
+  weakTo: ['Ice', 'Dragon', 'Fairy']
+}, {
+  type: 'Dark',
+  immuneTo: ['Psychic'],
+  resistTo: ['Ghost', 'Dark'],
+  weakTo: ['Bug', 'Fairy']
+}, {
+  type: 'Steel',
+  immuneTo: ['Poison'],
+  resistTo: ['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel', 'Fairy'],
+  weakTo: ['Fire', 'Fighting', 'Ground']
+}, {
+  type: 'Fairy',
+  immuneTo: ['Dragon'],
+  resistTo: ['Fighting', 'Bug', 'Dark'],
+  weakTo: ['Poison', 'Steel']
+}];
+
+function generateDefenders() {
+  let elParent = document.getElementById('defenders');
+  
+  matchups.forEach((el) => {
+    let newCell = document.createElement('div');
+    // newCell.className = 'cell';
+    newCell.innerHTML = el.type;
+    elParent.appendChild(newCell);
+  });
+}
+
+function generateAttackers() {
+  let elParent = document.getElementById('attackers');
+  
+  matchups.forEach((el) => {
+    let newCell = document.createElement('div');
+    // newCell.className = 'cell';
+    newCell.innerHTML = el.type;
+    elParent.appendChild(newCell);
+  });
+}
+
+function generateGrid() {
+  let elParent = document.getElementById('grid');
+  
+  matchups.forEach((el) => {
+    matchups.forEach((el) => {
+      let newCell = document.createElement('div');
+      newCell.className = 'cell';
+      newCell.innerHTML = 'X';
+      elParent.appendChild(newCell);
+    });
+  });
+}
+
 </script>
-<div id="grid">
-  <script type="text/javascript">
-    document.write(test);
-  </script>
+
+<div id="main">
+  <div class="title">
+    Type Matchups
+  </div>
+  <div class="subtitle">
+    Based on Scarlet/Violet
+  </div>
+  <div class="legend">
+    <span>X = Immune (0x)</span>
+    <span>/ = Resists (1/2x)</span>
+    <span>O = Weak To (2x)</span>
+  </div>
+  <div class="grid-container">
+    <div></div>
+    <div id="defenders"><script type="text/javascript">generateDefenders();</script></div>
+    <div id="attackers"><script type="text/javascript">generateAttackers();</script></div>
+    <div id="grid"><script type="text/javascript">generateGrid();</script></div>
+  </div>
 </div>

@@ -229,33 +229,63 @@ const matchups = [{
 }];
 
 let highlight = null;
+let lastHover = null;
 
-function highlightRelated(selector) {
-  if (highlight === null) {
-    let matching = document.querySelectorAll(selector);
-    matching.forEach((el) => {
-      el.classList.add('related');
-    });
+function generateSelectors(attacker, defender) {
+  let selector;
+  let sourceSelector;
+
+  if (attacker && defender) {
+    selector = `.attacker-${attacker}, .defender-${defender}`;
+    sourceSelector = `.attacker-${attacker}.defender-${defender}`;
+  } else if (attacker) {
+    selector = `.attacker-${attacker}`;
+    sourceSelector = `.header.attacker-${attacker}`;
+  } else if (defender) {
+    selector = `.defender-${defender}`;
+    sourceSelector = `.header.defender-${defender}`;
+  } else {
+    return null;
   }
+
+  return { selector, sourceSelector };
 }
 
-function unhighlightRelated(selector) {
+function highlightRelated(attacker, defender) {
+  let { selector, sourceSelector } = generateSelectors(attacker, defender);
+
   let matching = document.querySelectorAll(selector);
+  matching.forEach((el) => {
+    el.classList.add('related');
+  });
+
+  let sourceMatch = document.querySelector(sourceSelector);
+  sourceMatch.classList.remove('related');
+  sourceMatch.classList.add('selected');
+}
+
+function unhighlightRelated() {
+  let matching = document.querySelectorAll('.related, .selected');
   matching.forEach((el) => {
     el.classList.remove('related', 'selected');
   });
 }
 
-function freezeHighlights(cell, selector, types) {
-  if (highlight === null) {
-    highlight = types;
+function freezeHighlights(attacker, defender) {
+  if (!highlight) {
+    highlightRelated(attacker, defender);
+    highlight = { attacker: attacker, defender: defender };
+  }
+}
 
-    let matching = document.querySelectorAll(selector);
-    matching.forEach((el) => {
-      el.classList.add('related');
-    });
+function unfreezeHighlights() {
+  if (highlight) {
+    unhighlightRelated();
+    highlight = null;
 
-    cell.classList.add('selected');
+    if (lastHover) {
+      highlightRelated(lastHover.attacker, lastHover.defender);
+    }
   }
 }
 
@@ -263,7 +293,7 @@ function generateDefenders() {
   let elParent = document.querySelector('#defenders>.labels');
 
   matchups.forEach((defender) => {
-    let classList = `defender-${defender.type}`;
+    let classList = `header defender-${defender.type}`;
     let selector = `.defender-${defender.type}`;
 
     let newCell = document.createElement('div');
@@ -271,19 +301,20 @@ function generateDefenders() {
     newCell.innerHTML = defender.type;
 
     newCell.addEventListener('mouseover', (e) => {
-      if (highlight === null) {
-        highlightRelated(selector);
-        newCell.classList.add('selected');
+      lastHover = { defender: defender.type };
+
+      if (!highlight) {
+        highlightRelated(null, defender.type);
       }
     });
 
     newCell.addEventListener('mouseout', (e) => {
-      if (highlight === null) {
-        unhighlightRelated(selector);
+      if (!highlight) {
+        unhighlightRelated();
       }
     });
 
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, selector, { defender: defender.type }));
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(null, defender.type));
 
     elParent.appendChild(newCell);
   });
@@ -293,7 +324,7 @@ function generateAttackers() {
   let elParent = document.querySelector('#attackers>.labels');
 
   matchups.forEach((attacker) => {
-    let classList = `attacker-${attacker.type}`;
+    let classList = `header attacker-${attacker.type}`;
     let selector = `.attacker-${attacker.type}`;
 
     let newCell = document.createElement('div');
@@ -301,19 +332,20 @@ function generateAttackers() {
     newCell.innerHTML = attacker.type;
 
     newCell.addEventListener('mouseover', (e) => {
-      if (highlight === null) {
-        highlightRelated(selector);
-        newCell.classList.add('selected');
+      lastHover = { attacker: attacker.type };
+
+      if (!highlight) {
+        highlightRelated(attacker.type, null);
       }
     });
 
     newCell.addEventListener('mouseout', (e) => {
-      if (highlight === null) {
-        unhighlightRelated(selector);
+      if (!highlight) {
+        unhighlightRelated();
       }
     });
 
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, selector, { attacker: attacker.type }));
+    newCell.addEventListener('mousedown', (e) => freezeHighlights(attacker.type, null));
 
     elParent.appendChild(newCell);
   });
@@ -332,19 +364,20 @@ function generateGrid() {
       newCell.innerHTML = 'X';
 
       newCell.addEventListener('mouseover', (e) => {
-        if (highlight === null) {
-          highlightRelated(selector);
-          newCell.classList.add('selected');
+        lastHover = { attacker: attacker.type, defender: defender.type };
+
+        if (!highlight) {
+          highlightRelated(attacker.type, defender.type);
         }
       });
 
       newCell.addEventListener('mouseout', (e) => {
-        if (highlight === null) {
-          unhighlightRelated(selector);
+        if (!highlight) {
+          unhighlightRelated();
         }
       });
 
-      newCell.addEventListener('mousedown', (e) => freezeHighlights(newCell, selector, { attacker: attacker.type, defender: defender.type }));
+      newCell.addEventListener('mousedown', (e) => freezeHighlights(attacker.type, defender.type));
 
       elParent.appendChild(newCell);
     });
@@ -353,11 +386,7 @@ function generateGrid() {
 
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-
-  if (highlight !== null) {
-    unhighlightRelated(`.attacker-${highlight.attacker}, .defender-${highlight.defender}`);
-    highlight = null;
-  }
+  unfreezeHighlights();
 });
 </script>
 <div id="main">

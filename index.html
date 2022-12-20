@@ -361,7 +361,16 @@ function generateGrid() {
 
       let newCell = document.createElement('div');
       newCell.className = `cell ${classList}`;
-      newCell.innerHTML = 'X';
+      
+      if(defender.immuneTo.indexOf(attacker.type) > -1) {
+        newCell.innerHTML = 'X';
+      } else if(defender.resistTo.indexOf(attacker.type) > -1) {
+        newCell.innerHTML = '/';
+      } else if(defender.weakTo.indexOf(attacker.type) > -1) {
+        newCell.innerHTML = 'O';
+      } else {
+        
+      }
 
       newCell.addEventListener('mouseover', (e) => {
         lastHover = { attacker: attacker.type, defender: defender.type };

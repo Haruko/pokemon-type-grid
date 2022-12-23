@@ -1,428 +1,354 @@
-<title>Pokemon Type Matchups</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
-  
-  html {
-    background-color: #121212;
-    color: #bdbdbd;
-    color: rgba(255, 255, 255, 0.6);
-    user-select: none;
-    font-size: 18px;
-  }
-  
-  a {
-    color: rgba(0, 191, 255, 1.0);
-  }
-  
-  #main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+<head>
+  <title>Pokemon Type Matchups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Rubik:wght@300&display=swap">
+  <style>
+    html {
+      background-color: #121212;
+      color: #bdbdbd;
+      color: rgba(255, 255, 255, 0.6);
+      user-select: none;
+      font-size: 18px;
+    }
     
-    margin: auto;
+    a {
+      color: rgba(0, 191, 255, 1.0);
+    }
     
-    font-family: Rubik;
-    font-size: 1rem;
-  }
-  
-  .title {
-    font-weight: bold;
-    font-size: 2rem;
-  }
-  
-  
-  .subtitle {
-    font-weight: bold;
-    font-size: 1.25rem;
-  }
-  
-  /* Grid */
-  .grid-container {
-    display: grid;
-    grid-template-columns: auto 18fr;
-    grid-template-rows: auto 18fr;
+    #main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      
+      margin: auto;
+      
+      font-family: Rubik, sans-serif;
+      font-size: 1rem;
+    }
     
-    background-color: rgba(255, 255, 255, 0.20);
-    border-bottom-left-radius: 0.5em;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-  }
-  
-  #defenders {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    .title {
+      font-weight: bold;
+      font-size: 2rem;
+    }
     
-    font-weight: bold;
-  }
-  
-  #attackers {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr;
     
-    font-weight: bold;
-  }
-  
-  #defenders>.header,
-  #attackers>.header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    padding: 1rem;
-  }
-  
-  #attackers>.header {
-    writing-mode: vertical-lr;
-  }
-  
-  #defenders>.labels {
-    display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    grid-template-rows: 1fr;
-  }
-  
-  #attackers>.labels {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(18, 1fr);
-  }
-  
-  #defenders>.labels>div,
-  #attackers>.labels>div {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    flex-direction: column;
+    .subtitle {
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
     
-    box-sizing: border-box;
-    border-top: solid 1px rgba(0, 0, 0, 0.0);
-    border-left: solid 1px rgba(0, 0, 0, 0.0);
-  }
+    /* Grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto 18fr;
+      grid-template-rows: auto 18fr;
+      
+      background-color: rgba(255, 255, 255, 0.20);
+      border-bottom-left-radius: 0.5em;
+      border-top-left-radius: 0.5em;
+      border-top-right-radius: 0.5em;
+    }
     
-  #defenders>.labels>div {
-    padding: 1rem 0rem;
-    writing-mode: vertical-lr;
-  }
-  
-  #attackers>.labels>div {
-    padding: 0rem 1rem;
-  }
-  
-  #grid {
-    display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    grid-template-rows: repeat(18, 1fr);
+    #defenders {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      
+      font-weight: bold;
+    }
     
-     background-color: rgba(255, 255, 255, 0.55); 
-  }
-  
-  .cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    #attackers {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: 1fr;
+      
+      font-weight: bold;
+    }
     
-    aspect-ratio: 1 / 1;
-    height: 2.25rem;
+    #defenders>.header,
+    #attackers>.header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      padding: 1rem;
+    }
     
-    box-sizing: border-box;
-    border-top: solid 1px rgba(0, 0, 0, 0.1);
-    border-left: solid 1px rgba(0, 0, 0, 0.1);
+    #attackers>.header {
+      writing-mode: vertical-lr;
+    }
     
-    font-family: 'Bangers', cursive;
-    font-size: 1.5rem;
-  }
-  
-  .cell.immune {
-    color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .cell.resist {
-    color: rgba(127, 0, 0, 0.75);
-    font-size: 1rem;
-  }
-  
-  .cell.normal {
-    color: rgba(0, 0, 0, 0.3);
-  }
-  
-  .cell.weak {
-    color: rgba(0, 127, 0, 0.75);
-  }
-  
-  /* Highlighting */
-  
-  .related {
-    background-color: rgba(0, 191, 255, 0.25);
+    #defenders>.labels {
+      display: grid;
+      grid-template-columns: repeat(18, 1fr);
+      grid-template-rows: 1fr;
+    }
     
-    box-sizing: border-box;
-    border-top: solid 1px rgba(0, 0, 0, 0.0);
-    border-left: solid 1px rgba(0, 0, 0, 0.0);
-  }
-  
-  .selected {
-    background-color: rgba(0, 191, 255, 0.85);
+    #attackers>.labels {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(18, 1fr);
+    }
     
-    box-sizing: border-box;
-    border-top: solid 1px rgba(0, 0, 0, 0.0);
-    border-left: solid 1px rgba(0, 0, 0, 0.0);
-  }
-  
-  .selected.header {
-    color: rgba(0, 0, 0, 0.6);
-  }
-</style>
-<script type="text/javascript">
-/*
-  Order: Normal Fire Water Electric Grass Ice Fighting Poison Ground Flying Psychic Bug Rock Ghost Dragon Dark Steel Fairy
-*/
+    #defenders>.labels>div,
+    #attackers>.labels>div {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      flex-direction: column;
+      
+      box-sizing: border-box;
+      border-top: solid 1px rgba(0, 0, 0, 0.0);
+      border-left: solid 1px rgba(0, 0, 0, 0.0);
+    }
+      
+    #defenders>.labels>div {
+      padding: 1rem 0rem;
+      writing-mode: vertical-lr;
+    }
+    
+    #attackers>.labels>div {
+      padding: 0rem 1rem;
+    }
+    
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(18, 1fr);
+      grid-template-rows: repeat(18, 1fr);
+      
+       background-color: rgba(255, 255, 255, 0.55); 
+    }
+    
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      
+      aspect-ratio: 1 / 1;
+      height: 2.25rem;
+      
+      box-sizing: border-box;
+      border-top: solid 1px rgba(0, 0, 0, 0.1);
+      border-left: solid 1px rgba(0, 0, 0, 0.1);
+      
+      font-family: 'Bangers', cursive;
+      font-size: 1.5rem;
+    }
+    
+    .cell.immune {
+      color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .cell.resist {
+      color: rgba(127, 0, 0, 0.75);
+      font-size: 1rem;
+    }
+    
+    .cell.normal {
+      color: rgba(0, 0, 0, 0.3);
+    }
+    
+    .cell.weak {
+      color: rgba(0, 127, 0, 0.75);
+    }
+    
+    /* Highlighting */
+    
+    .related {
+      background-color: rgba(0, 191, 255, 0.25);
+      
+      box-sizing: border-box;
+      border-top: solid 1px rgba(0, 0, 0, 0.0);
+      border-left: solid 1px rgba(0, 0, 0, 0.0);
+    }
+    
+    .selected {
+      background-color: rgba(0, 191, 255, 0.85);
+      
+      box-sizing: border-box;
+      border-top: solid 1px rgba(0, 0, 0, 0.0);
+      border-left: solid 1px rgba(0, 0, 0, 0.0);
+    }
+    
+    .selected.header {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  </style>
+  <script type="text/javascript">
+  /*
+    Order: Normal Fire Water Electric Grass Ice Fighting Poison Ground Flying Psychic Bug Rock Ghost Dragon Dark Steel Fairy
+  */
 
-const matchups = [{
-  type: 'Normal',
-  immuneTo: ['Ghost'],
-  resistTo: [],
-  weakTo: ['Fighting']
-}, {
-  type: 'Fire',
-  immuneTo: [],
-  resistTo: ['Fire', 'Grass', 'Ice', 'Bug', 'Steel', 'Fairy'],
-  weakTo: ['Water', 'Ground', 'Rock']
-}, {
-  type: 'Water',
-  immuneTo: [],
-  resistTo: ['Fire', 'Water', 'Ice', 'Steel'],
-  weakTo: ['Electric', 'Grass']
-}, {
-  type: 'Electric',
-  immuneTo: [],
-  resistTo: ['Electric', 'Flying', 'Steel'],
-  weakTo: ['Ground']
-}, {
-  type: 'Grass',
-  immuneTo: [],
-  resistTo: ['Water', 'Electric', 'Grass', 'Ground'],
-  weakTo: ['Fire', 'Ice', 'Poison', 'Flying', 'Bug']
-}, {
-  type: 'Ice',
-  immuneTo: [],
-  resistTo: ['Ice'],
-  weakTo: ['Fire', 'Fighting', 'Rock', 'Steel']
-}, {
-  type: 'Fighting',
-  immuneTo: [],
-  resistTo: ['Bug', 'Rock', 'Dark'],
-  weakTo: ['Flying', 'Psychic', 'Fairy']
-}, {
-  type: 'Poison',
-  immuneTo: [],
-  resistTo: ['Grass', 'Fighting', 'Poison', 'Bug', 'Fairy'],
-  weakTo: ['Ground', 'Psychic']
-}, {
-  type: 'Ground',
-  immuneTo: ['Electric'],
-  resistTo: ['Poison', 'Rock'],
-  weakTo: ['Water', 'Grass', 'Ice']
-}, {
-  type: 'Flying',
-  immuneTo: ['Ground'],
-  resistTo: ['Grass', 'Fighting', 'Bug'],
-  weakTo: ['Electric', 'Ice', 'Rock']
-}, {
-  type: 'Psychic',
-  immuneTo: [],
-  resistTo: ['Fighting', 'Psychic'],
-  weakTo: ['Bug', 'Ghost', 'Dark']
-}, {
-  type: 'Bug',
-  immuneTo: [],
-  resistTo: ['Grass', 'Fighting', 'Ground'],
-  weakTo: ['Fire', 'Flying', 'Rock']
-}, {
-  type: 'Rock',
-  immuneTo: [],
-  resistTo: ['Normal', 'Fire', 'Poison', 'Flying'],
-  weakTo: ['Water', 'Grass', 'Fighting', 'Ground', 'Steel']
-}, {
-  type: 'Ghost',
-  immuneTo: ['Normal', 'Fighting'],
-  resistTo: ['Poison', 'Bug'],
-  weakTo: ['Ghost', 'Dark']
-}, {
-  type: 'Dragon',
-  immuneTo: [],
-  resistTo: ['Fire', 'Water', 'Electric', 'Grass'],
-  weakTo: ['Ice', 'Dragon', 'Fairy']
-}, {
-  type: 'Dark',
-  immuneTo: ['Psychic'],
-  resistTo: ['Ghost', 'Dark'],
-  weakTo: ['Bug', 'Fairy']
-}, {
-  type: 'Steel',
-  immuneTo: ['Poison'],
-  resistTo: ['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel', 'Fairy'],
-  weakTo: ['Fire', 'Fighting', 'Ground']
-}, {
-  type: 'Fairy',
-  immuneTo: ['Dragon'],
-  resistTo: ['Fighting', 'Bug', 'Dark'],
-  weakTo: ['Poison', 'Steel']
-}];
+  const matchups = [{
+    type: 'Normal',
+    immuneTo: ['Ghost'],
+    resistTo: [],
+    weakTo: ['Fighting']
+  }, {
+    type: 'Fire',
+    immuneTo: [],
+    resistTo: ['Fire', 'Grass', 'Ice', 'Bug', 'Steel', 'Fairy'],
+    weakTo: ['Water', 'Ground', 'Rock']
+  }, {
+    type: 'Water',
+    immuneTo: [],
+    resistTo: ['Fire', 'Water', 'Ice', 'Steel'],
+    weakTo: ['Electric', 'Grass']
+  }, {
+    type: 'Electric',
+    immuneTo: [],
+    resistTo: ['Electric', 'Flying', 'Steel'],
+    weakTo: ['Ground']
+  }, {
+    type: 'Grass',
+    immuneTo: [],
+    resistTo: ['Water', 'Electric', 'Grass', 'Ground'],
+    weakTo: ['Fire', 'Ice', 'Poison', 'Flying', 'Bug']
+  }, {
+    type: 'Ice',
+    immuneTo: [],
+    resistTo: ['Ice'],
+    weakTo: ['Fire', 'Fighting', 'Rock', 'Steel']
+  }, {
+    type: 'Fighting',
+    immuneTo: [],
+    resistTo: ['Bug', 'Rock', 'Dark'],
+    weakTo: ['Flying', 'Psychic', 'Fairy']
+  }, {
+    type: 'Poison',
+    immuneTo: [],
+    resistTo: ['Grass', 'Fighting', 'Poison', 'Bug', 'Fairy'],
+    weakTo: ['Ground', 'Psychic']
+  }, {
+    type: 'Ground',
+    immuneTo: ['Electric'],
+    resistTo: ['Poison', 'Rock'],
+    weakTo: ['Water', 'Grass', 'Ice']
+  }, {
+    type: 'Flying',
+    immuneTo: ['Ground'],
+    resistTo: ['Grass', 'Fighting', 'Bug'],
+    weakTo: ['Electric', 'Ice', 'Rock']
+  }, {
+    type: 'Psychic',
+    immuneTo: [],
+    resistTo: ['Fighting', 'Psychic'],
+    weakTo: ['Bug', 'Ghost', 'Dark']
+  }, {
+    type: 'Bug',
+    immuneTo: [],
+    resistTo: ['Grass', 'Fighting', 'Ground'],
+    weakTo: ['Fire', 'Flying', 'Rock']
+  }, {
+    type: 'Rock',
+    immuneTo: [],
+    resistTo: ['Normal', 'Fire', 'Poison', 'Flying'],
+    weakTo: ['Water', 'Grass', 'Fighting', 'Ground', 'Steel']
+  }, {
+    type: 'Ghost',
+    immuneTo: ['Normal', 'Fighting'],
+    resistTo: ['Poison', 'Bug'],
+    weakTo: ['Ghost', 'Dark']
+  }, {
+    type: 'Dragon',
+    immuneTo: [],
+    resistTo: ['Fire', 'Water', 'Electric', 'Grass'],
+    weakTo: ['Ice', 'Dragon', 'Fairy']
+  }, {
+    type: 'Dark',
+    immuneTo: ['Psychic'],
+    resistTo: ['Ghost', 'Dark'],
+    weakTo: ['Bug', 'Fairy']
+  }, {
+    type: 'Steel',
+    immuneTo: ['Poison'],
+    resistTo: ['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel', 'Fairy'],
+    weakTo: ['Fire', 'Fighting', 'Ground']
+  }, {
+    type: 'Fairy',
+    immuneTo: ['Dragon'],
+    resistTo: ['Fighting', 'Bug', 'Dark'],
+    weakTo: ['Poison', 'Steel']
+  }];
 
-let highlight = null;
-let lastHover = null;
+  let highlight = null;
+  let lastHover = null;
 
-function generateSelectors(attacker, defender) {
-  let selector;
-  let sourceSelector;
+  function generateSelectors(attacker, defender) {
+    let selector;
+    let sourceSelector;
 
-  if (attacker && defender) {
-    selector = `.attacker-${attacker}, .defender-${defender}`;
-    sourceSelector = `.attacker-${attacker}.defender-${defender}`;
-  } else if (attacker) {
-    selector = `.attacker-${attacker}`;
-    sourceSelector = `.header.attacker-${attacker}`;
-  } else if (defender) {
-    selector = `.defender-${defender}`;
-    sourceSelector = `.header.defender-${defender}`;
-  } else {
-    return null;
+    if (attacker && defender) {
+      selector = `.attacker-${attacker}, .defender-${defender}`;
+      sourceSelector = `.attacker-${attacker}.defender-${defender}`;
+    } else if (attacker) {
+      selector = `.attacker-${attacker}`;
+      sourceSelector = `.header.attacker-${attacker}`;
+    } else if (defender) {
+      selector = `.defender-${defender}`;
+      sourceSelector = `.header.defender-${defender}`;
+    } else {
+      return null;
+    }
+
+    return { selector, sourceSelector };
   }
 
-  return { selector, sourceSelector };
-}
+  function highlightRelated(attacker, defender) {
+    let { selector, sourceSelector } = generateSelectors(attacker, defender);
 
-function highlightRelated(attacker, defender) {
-  let { selector, sourceSelector } = generateSelectors(attacker, defender);
+    let matching = document.querySelectorAll(selector);
+    matching.forEach((el) => {
+      el.classList.add('related');
+    });
 
-  let matching = document.querySelectorAll(selector);
-  matching.forEach((el) => {
-    el.classList.add('related');
-  });
+    let sourceMatch = document.querySelector(sourceSelector);
+    sourceMatch.classList.remove('related');
+    sourceMatch.classList.add('selected');
+  }
 
-  let sourceMatch = document.querySelector(sourceSelector);
-  sourceMatch.classList.remove('related');
-  sourceMatch.classList.add('selected');
-}
+  function unhighlightRelated() {
+    let matching = document.querySelectorAll('.related, .selected');
+    matching.forEach((el) => {
+      el.classList.remove('related', 'selected');
+    });
+  }
 
-function unhighlightRelated() {
-  let matching = document.querySelectorAll('.related, .selected');
-  matching.forEach((el) => {
-    el.classList.remove('related', 'selected');
-  });
-}
+  function freezeHighlights(attacker, defender) {
+    highlightRelated(attacker, defender);
+    highlight = true;
+  }
 
-function freezeHighlights(attacker, defender) {
-  highlightRelated(attacker, defender);
-  highlight = true;
-}
+  function unfreezeHighlights() {
+    if (highlight) {
+      unhighlightRelated();
+      highlight = null;
 
-function unfreezeHighlights() {
-  if (highlight) {
-    unhighlightRelated();
-    highlight = null;
-
-    if (lastHover) {
-      highlightRelated(lastHover.attacker, lastHover.defender);
+      if (lastHover) {
+        highlightRelated(lastHover.attacker, lastHover.defender);
+      }
     }
   }
-}
 
-function generateDefenders() {
-  let elParent = document.querySelector('#defenders>.labels');
+  function generateDefenders() {
+    let elParent = document.querySelector('#defenders>.labels');
 
-  matchups.forEach((defender) => {
-    let classList = `header defender-${defender.type}`;
-    let selector = `.defender-${defender.type}`;
-
-    let newCell = document.createElement('div');
-    newCell.className = classList;
-    newCell.innerHTML = defender.type;
-
-    newCell.addEventListener('mouseover', (e) => {
-      lastHover = { defender: defender.type };
-
-      if (!highlight) {
-        highlightRelated(null, defender.type);
-      }
-    });
-
-    newCell.addEventListener('mouseout', (e) => {
-      if (!highlight) {
-        unhighlightRelated();
-      }
-    });
-
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(null, defender.type));
-
-    elParent.appendChild(newCell);
-  });
-}
-
-function generateAttackers() {
-  let elParent = document.querySelector('#attackers>.labels');
-
-  matchups.forEach((attacker) => {
-    let classList = `header attacker-${attacker.type}`;
-    let selector = `.attacker-${attacker.type}`;
-
-    let newCell = document.createElement('div');
-    newCell.className = classList;
-    newCell.innerHTML = attacker.type;
-
-    newCell.addEventListener('mouseover', (e) => {
-      lastHover = { attacker: attacker.type };
-
-      if (!highlight) {
-        highlightRelated(attacker.type, null);
-      }
-    });
-
-    newCell.addEventListener('mouseout', (e) => {
-      if (!highlight) {
-        unhighlightRelated();
-      }
-    });
-
-    newCell.addEventListener('mousedown', (e) => freezeHighlights(attacker.type, null));
-
-    elParent.appendChild(newCell);
-  });
-}
-
-function generateGrid() {
-  let elParent = document.getElementById('grid');
-
-  matchups.forEach((attacker) => {
     matchups.forEach((defender) => {
-      let classList = `attacker-${attacker.type} defender-${defender.type}`;
-      let selector = `.attacker-${attacker.type}, .defender-${defender.type}`;
+      let classList = `header defender-${defender.type}`;
+      let selector = `.defender-${defender.type}`;
 
       let newCell = document.createElement('div');
-      newCell.className = `cell ${classList}`;
-
-      if (defender.immuneTo.indexOf(attacker.type) > -1) {
-        newCell.innerHTML = '0x';
-        newCell.classList.add('immune');
-      } else if (defender.resistTo.indexOf(attacker.type) > -1) {
-        newCell.innerHTML = '1/2x';
-        newCell.classList.add('resist');
-      } else if (defender.weakTo.indexOf(attacker.type) > -1) {
-        newCell.innerHTML = '2x';
-        newCell.classList.add('weak');
-      } else {
-        newCell.classList.add('normal');
-      }
+      newCell.className = classList;
+      newCell.innerHTML = defender.type;
 
       newCell.addEventListener('mouseover', (e) => {
-        lastHover = { attacker: attacker.type, defender: defender.type };
+        lastHover = { defender: defender.type };
 
         if (!highlight) {
-          highlightRelated(attacker.type, defender.type);
+          highlightRelated(null, defender.type);
         }
       });
 
@@ -432,55 +358,133 @@ function generateGrid() {
         }
       });
 
-      newCell.addEventListener('mousedown', (e) => freezeHighlights(attacker.type, defender.type));
+      newCell.addEventListener('mousedown', (e) => freezeHighlights(null, defender.type));
 
       elParent.appendChild(newCell);
     });
-  });
-}
+  }
 
-document.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  unfreezeHighlights();
-});
-</script>
-<div id="main">
-  <div class="title">
-    Type Matchups
-  </div>
-  <div class="subtitle">
-    Based on Scarlet/Violet
-  </div>
-  <div class="grid-container">
-    <div></div>
-    <div id="defenders">
-      <div class="header"><span>Defender</span><span>Defender</span></div>
-      <div class="labels">
+  function generateAttackers() {
+    let elParent = document.querySelector('#attackers>.labels');
+
+    matchups.forEach((attacker) => {
+      let classList = `header attacker-${attacker.type}`;
+      let selector = `.attacker-${attacker.type}`;
+
+      let newCell = document.createElement('div');
+      newCell.className = classList;
+      newCell.innerHTML = attacker.type;
+
+      newCell.addEventListener('mouseover', (e) => {
+        lastHover = { attacker: attacker.type };
+
+        if (!highlight) {
+          highlightRelated(attacker.type, null);
+        }
+      });
+
+      newCell.addEventListener('mouseout', (e) => {
+        if (!highlight) {
+          unhighlightRelated();
+        }
+      });
+
+      newCell.addEventListener('mousedown', (e) => freezeHighlights(attacker.type, null));
+
+      elParent.appendChild(newCell);
+    });
+  }
+
+  function generateGrid() {
+    let elParent = document.getElementById('grid');
+
+    matchups.forEach((attacker) => {
+      matchups.forEach((defender) => {
+        let classList = `attacker-${attacker.type} defender-${defender.type}`;
+        let selector = `.attacker-${attacker.type}, .defender-${defender.type}`;
+
+        let newCell = document.createElement('div');
+        newCell.className = `cell ${classList}`;
+
+        if (defender.immuneTo.indexOf(attacker.type) > -1) {
+          newCell.innerHTML = '0x';
+          newCell.classList.add('immune');
+        } else if (defender.resistTo.indexOf(attacker.type) > -1) {
+          newCell.innerHTML = '1/2x';
+          newCell.classList.add('resist');
+        } else if (defender.weakTo.indexOf(attacker.type) > -1) {
+          newCell.innerHTML = '2x';
+          newCell.classList.add('weak');
+        } else {
+          newCell.classList.add('normal');
+        }
+
+        newCell.addEventListener('mouseover', (e) => {
+          lastHover = { attacker: attacker.type, defender: defender.type };
+
+          if (!highlight) {
+            highlightRelated(attacker.type, defender.type);
+          }
+        });
+
+        newCell.addEventListener('mouseout', (e) => {
+          if (!highlight) {
+            unhighlightRelated();
+          }
+        });
+
+        newCell.addEventListener('mousedown', (e) => freezeHighlights(attacker.type, defender.type));
+
+        elParent.appendChild(newCell);
+      });
+    });
+  }
+
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    unfreezeHighlights();
+  });
+  </script>
+</head>
+<body>
+  <div id="main">
+    <div class="title">
+      Type Matchups
+    </div>
+    <div class="subtitle">
+      Based on Scarlet/Violet
+    </div>
+    <div class="grid-container">
+      <div></div>
+      <div id="defenders">
+        <div class="header"><span>Defender</span><span>Defender</span></div>
+        <div class="labels">
+          <script type="text/javascript">
+          generateDefenders();
+          </script>
+        </div>
+      </div>
+      <div id="attackers">
+        <div class="header"><span>Attacker</span><span>Attacker</span></div>
+        <div class="labels">
+          <script type="text/javascript">
+          generateAttackers();
+          </script>
+        </div>
+      </div>
+      <div id="grid">
         <script type="text/javascript">
-        generateDefenders();
+        generateGrid();
         </script>
       </div>
     </div>
-    <div id="attackers">
-      <div class="header"><span>Attacker</span><span>Attacker</span></div>
-      <div class="labels">
-        <script type="text/javascript">
-        generateAttackers();
-        </script>
-      </div>
+    <div>
+      <b>Hover</b> over types/matchups to highlight -
+      <b>Left click</b> to freeze highlights (You can have multiple!) -
+      <b>Right click</b> to unfreeze highlights
     </div>
-    <div id="grid">
-      <script type="text/javascript">
-      generateGrid();
-      </script>
+    <div>
+      Coded by <a href="https://twitch.tv/isoitiro">Isoitiro</a>
     </div>
   </div>
-  <div>
-    <b>Hover</b> over types/matchups to highlight -
-    <b>Left click</b> to freeze highlights (You can have multiple!) -
-    <b>Right click</b> to unfreeze highlights
-  </div>
-  <div>
-    Coded by <a href="https://twitch.tv/isoitiro">Isoitiro</a>
-  </div>
-</div>
+</body>

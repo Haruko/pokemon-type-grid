@@ -128,11 +128,6 @@
     }
     
     .cell {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      
       aspect-ratio: 1 / 1;
       height: 2.25rem;
       
@@ -142,6 +137,20 @@
       
       font-family: 'Bangers', cursive;
       font-size: 1.5rem;
+      /*text-shadow: -1px  1px 4px rgba(255, 255, 255, 0.25),
+                    1px  1px 4px rgba(255, 255, 255, 0.25),
+                    1px -1px 4px rgba(255, 255, 255, 0.25),
+                   -1px -1px 4px rgba(255, 255, 255, 0.25);*/
+    }
+    
+    .cell div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      
+      width: 100%;
+      height: 100%;
     }
     
     /* Cell Effectiveness */
@@ -163,47 +172,68 @@
       color: #2a892a;
     }
     
-    /* Hovering */
+    /* Hovering and Highlights */
     
-    .hovered-related-defender {
-      background-color: rgba(0, 0, 255, 0.25);
+    .label.highlight {
+      color: rgba(47, 47, 47, 1.0);
     }
     
     .hovered-related-attack {
-      background-color: rgba(255, 0, 0, 0.25);
+      background-color: rgba(255, 0, 63, 0.1);
     }
     
-    .hovered {
-      background-color: rgba(255, 255, 255, 0.25);
-    }
-    
-    /* Highlighting */
-    
-    .label.highlight {
-      background-color: rgba(255, 255, 255, 1.0);
-    }
-    
-    .cell.highlight {
-      background-color: rgba(255, 255, 255, 1.0);
-    }
-    
-    .related-defender {
-      background-color: rgba(0, 0, 255, 1.0);
+    .hovered-related-defender {
+      background-color: rgba(0, 191, 255, 0.1);
     }
     
     .related-attack {
-      background-color: rgba(255, 0, 0, 1.0);
+      background-color: rgba(255, 0, 63, 0.5);
+    }
+    
+    .related-defender {
+      background-color: rgba(0, 191, 255, 0.5);
+    }
+    
+    #attacks .hovered,
+    #defenders .hovered,
+    #grid .hovered {
+      background-color: rgba(0, 191, 63, 0.25);
+    }
+    
+    #attacks .label.highlight,
+    #defenders .label.highlight,
+    #grid .cell.highlight {
+      background-color: rgba(0, 191, 63, 0.5);
     }
     
     .related-defender.related-attack:not(.highlight) {
-      background-color: rgba(255, 0, 255, 1.0);
+      background-color: #9484A4;
     }
     
-    /* Hovering + Highlighting */
+    /* Attacker mixers */
+    .related-attack.hovered-related-attack {
+      background-color: #C37689;
+    }
     
-    .hovered-related-defender.related-attack,
-    .hovered-related-attack.related-defender {
-      background-color: rgba(255, 0, 255, 0.75);
+    .related-attack.hovered-related-attack.label {
+      color: rgba(47, 47, 47, 1.0);
+    }
+    
+    .related-attack.hovered-related-defender {
+      background-color: #B68093;
+    }
+    
+    /* Defender mixers */
+    .related-defender.hovered-related-defender {
+      background-color: #76B0C3;
+    }
+    
+    .related-defender.hovered-related-defender.label {
+      color: rgba(47, 47, 47, 1.0);
+    }
+    
+    .related-defender.hovered-related-attack {
+      background-color: #83A6B9;
     }
     
     
@@ -227,10 +257,6 @@
       box-sizing: border-box;
       border-top: solid 1px rgba(0, 0, 0, 0.0);
       border-left: solid 1px rgba(0, 0, 0, 0.0);
-    }*/
-    
-    /*.selected.label {
-      color: #2f2f2f;
     }*/
   </style>
   <script type="text/javascript">
@@ -384,7 +410,7 @@
     });
   }
 
-  function generateGrid() {
+  function generateMatchups() {
     let elParent = document.getElementById('grid');
 
     matchups.forEach((attack) => {
@@ -395,15 +421,16 @@
         newCell.className = `cell ${classList}`;
 
         if (defender.immuneTo.indexOf(attack.type) > -1) {
-          newCell.innerHTML = '0x';
+          newCell.innerHTML = '<div>0x</div>';
           newCell.classList.add('immune');
         } else if (defender.resistTo.indexOf(attack.type) > -1) {
-          newCell.innerHTML = '1/2x';
+          newCell.innerHTML = '<div>1/2x</div>';
           newCell.classList.add('resist');
         } else if (defender.weakTo.indexOf(attack.type) > -1) {
-          newCell.innerHTML = '2x';
+          newCell.innerHTML = '<div>2x</div>';
           newCell.classList.add('weak');
         } else {
+          newCell.innerHTML = '<div></div>';
           newCell.classList.add('normal');
         }
 
@@ -608,15 +635,23 @@
   }
   
   function matchupHovered(attack, defender) {
-    // Highlight the label
+    // Highlight the hovered cell
     let cellEl = document.querySelector(`#grid .attack-${attack}.defender-${defender}`);
     cellEl.classList.add('hovered');
+    
+    // Highlight the attack label
+    let attackerLabelEl = document.querySelector(`#attacks .attack-${attack}`);
+    attackerLabelEl.classList.add('hovered-related-attack');
     
     // Highlight the attack related cells
     let attackerCellsEl = document.querySelectorAll(`#grid .attack-${attack}`);
       attackerCellsEl.forEach((el) => {
         el.classList.add('hovered-related-attack');
       });
+    
+    // Highlight the defender label
+    let defenderLabelEl = document.querySelector(`#defenders .defender-${defender}`);
+    defenderLabelEl.classList.add('hovered-related-defender');
     
     // Highlight the defender related cells
     let defenderCellsEl = document.querySelectorAll(`#grid .defender-${defender}`);
@@ -664,7 +699,7 @@
       </div>
       <div id="grid">
         <script type="text/javascript">
-          generateGrid();
+          generateMatchups();
         </script>
       </div>
     </div>

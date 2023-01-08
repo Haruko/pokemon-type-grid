@@ -33,41 +33,12 @@
       font-size: 2rem;
     }
     
-    
     .subtitle {
       font-weight: bold;
       font-size: 1.25rem;
     }
     
-    /* Grid */
-    .grid-container {
-      display: grid;
-      grid-template-columns: auto 18fr;
-      grid-template-rows: auto 18fr;
-      
-      background-color: rgba(255, 255, 255, 0.20);
-      border-bottom-left-radius: 0.5em;
-      border-top-left-radius: 0.5em;
-      border-top-right-radius: 0.5em;
-      
-      color: #b3b3b3;
-    }
-    
-    #defenders {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      
-      font-weight: bold;
-    }
-    
-    #attackers {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      grid-template-rows: 1fr;
-      
-      font-weight: bold;
-    }
+    /* Headers */
     
     .header {
       display: flex;
@@ -75,22 +46,6 @@
       align-items: center;
       justify-content: space-around;
       padding: 1rem;
-    }
-    
-    #attackers>.header {
-      writing-mode: vertical-lr;
-    }
-    
-    #defenders>.labels {
-      display: grid;
-      grid-template-columns: repeat(18, 1fr);
-      grid-template-rows: 1fr;
-    }
-    
-    #attackers>.labels {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(18, 1fr);
     }
     
     .label {
@@ -103,15 +58,53 @@
       border-top: solid 1px rgba(0, 0, 0, 0.0);
       border-left: solid 1px rgba(0, 0, 0, 0.0);
     }
+    
+    /* Attack Header */
+    
+    #attacks {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: 1fr;
       
+      font-weight: bold;
+    }
+    
+    #attacks .header {
+      writing-mode: vertical-lr;
+    }
+    
+    #attacks .labels {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(18, 1fr);
+    }
+    
+    #attacks .label {
+      padding: 0rem 1rem;
+    }
+    
+    /* Defender Header */
+    
+    #defenders {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      
+      font-weight: bold;
+    }
+    
+    #defenders .labels {
+      display: grid;
+      grid-template-columns: repeat(18, 1fr);
+      grid-template-rows: 1fr;
+    }
+    
     #defenders .label {
       padding: 1rem 0rem;
       writing-mode: vertical-lr;
     }
     
-    #attackers .label {
-      padding: 0rem 1rem;
-    }
+    /* Grid */
     
     #grid {
       display: grid;
@@ -119,6 +112,19 @@
       grid-template-rows: repeat(18, 1fr);
       
       background-color: rgba(255, 255, 255, 0.55); 
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto 18fr;
+      grid-template-rows: auto 18fr;
+      
+      background-color: rgba(255, 255, 255, 0.20);
+      border-bottom-left-radius: 0.5em;
+      border-top-left-radius: 0.5em;
+      border-top-right-radius: 0.5em;
+      
+      color: #b3b3b3;
     }
     
     .cell {
@@ -138,6 +144,8 @@
       font-size: 1.5rem;
     }
     
+    /* Cell Effectiveness */
+    
     .cell.immune {
       color: #545454;
     }
@@ -155,50 +163,75 @@
       color: #2a892a;
     }
     
+    /* Hovering */
+    
+    .hovered-related-defender {
+      background-color: rgba(0, 0, 255, 0.25);
+    }
+    
+    .hovered-related-attack {
+      background-color: rgba(255, 0, 0, 0.25);
+    }
+    
+    .hovered {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+    
     /* Highlighting */
     
-    .related {
+    .label.highlight {
+      background-color: rgba(255, 255, 255, 1.0);
+    }
+    
+    .cell.highlight {
+      background-color: rgba(255, 255, 255, 1.0);
+    }
+    
+    .related-defender {
+      background-color: rgba(0, 0, 255, 1.0);
+    }
+    
+    .related-attack {
+      background-color: rgba(255, 0, 0, 1.0);
+    }
+    
+    .related-defender.related-attack:not(.highlight) {
+      background-color: rgba(255, 0, 255, 1.0);
+    }
+    
+    /* Hovering + Highlighting */
+    
+    .hovered-related-defender.related-attack,
+    .hovered-related-attack.related-defender {
+      background-color: rgba(255, 0, 255, 0.75);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    /*.related {
       background-color: rgba(0, 191, 255, 0.25);
       
       box-sizing: border-box;
       border-top: solid 1px rgba(0, 0, 0, 0.0);
       border-left: solid 1px rgba(0, 0, 0, 0.0);
-    }
+    }*/
     
-    .selected {
+    /*.selected {
       background-color: rgba(0, 191, 255, 0.85);
       
       box-sizing: border-box;
       border-top: solid 1px rgba(0, 0, 0, 0.0);
       border-left: solid 1px rgba(0, 0, 0, 0.0);
-    }
+    }*/
     
-    .selected.label {
+    /*.selected.label {
       color: #2f2f2f;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    .label.highlight {
-      background-color: white;
-    }
-    #grid .cell.highlight {
-      background-color: black;
-    }
-    .related-defender {
-      background-color: red;
-    }
-    .related-attacker {
-      background-color: blue;
-    }
-    .related-defender.related-attacker {
-      background-color: purple;
-    }
+    }*/
   </style>
   <script type="text/javascript">
   /*
@@ -301,52 +334,143 @@
   let lastHover = null;
 
   let highlights = {
-    attackers: new Set(),
+    attacks: new Set(),
     defenders: new Set(),
     matchups: new Set()
   };
+  
+  /* Element generation */
+  function generateAttacks() {
+    let elParent = document.querySelector('#attacks .labels');
 
-  function isHighlighting() {
-    return highlights.attackers.size > 0 || highlights.defenders.size > 0 || highlights.matchups.size > 0;
+    matchups.forEach((attack) => {
+      let classList = `label attack-${attack.type}`;
+      
+      let newCell = document.createElement('div');
+      newCell.className = classList;
+      newCell.innerHTML = attack.type;
+
+      newCell.addEventListener('mouseover', (e) => attackHovered(attack.type));
+      newCell.addEventListener('mouseout', (e) => elementUnhovered());
+      newCell.addEventListener('mousedown', (e) => {
+        if (e.button === 0) {
+          attackClicked(attack.type)
+        }
+      });
+
+      elParent.appendChild(newCell);
+    });
+  }
+  
+  function generateDefenders() {
+    let elParent = document.querySelector('#defenders .labels');
+
+    matchups.forEach((defender) => {
+      let classList = `label defender-${defender.type}`;
+      
+      let newCell = document.createElement('div');
+      newCell.className = classList;
+      newCell.innerHTML = defender.type;
+
+      newCell.addEventListener('mouseover', (e) => defenderHovered(defender.type));
+      newCell.addEventListener('mouseout', (e) => elementUnhovered());
+      newCell.addEventListener('mousedown', (e) => {
+        if (e.button === 0) {
+          defenderClicked(defender.type)
+        }
+      });
+
+      elParent.appendChild(newCell);
+    });
   }
 
-  function attackerClicked(attacker) {
-    let labelEl = document.querySelector(`#attackers .label.attacker-${attacker}`);
-    if (highlights.attackers.has(attacker)) {
+  function generateGrid() {
+    let elParent = document.getElementById('grid');
+
+    matchups.forEach((attack) => {
+      matchups.forEach((defender) => {
+        let classList = `attack-${attack.type} defender-${defender.type}`;
+
+        let newCell = document.createElement('div');
+        newCell.className = `cell ${classList}`;
+
+        if (defender.immuneTo.indexOf(attack.type) > -1) {
+          newCell.innerHTML = '0x';
+          newCell.classList.add('immune');
+        } else if (defender.resistTo.indexOf(attack.type) > -1) {
+          newCell.innerHTML = '1/2x';
+          newCell.classList.add('resist');
+        } else if (defender.weakTo.indexOf(attack.type) > -1) {
+          newCell.innerHTML = '2x';
+          newCell.classList.add('weak');
+        } else {
+          newCell.classList.add('normal');
+        }
+
+        newCell.addEventListener('mouseover', (e) => matchupHovered(attack.type, defender.type));
+        newCell.addEventListener('mouseout', (e) => elementUnhovered());
+        newCell.addEventListener('mousedown', (e) => {
+          if (e.button === 0) {
+            matchupClicked(attack.type, defender.type)
+          }
+        });
+
+        elParent.appendChild(newCell);
+      });
+    });
+  }
+
+  /* Clicking */
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.highlight').forEach((el) => el.classList.remove('highlight'));
+    document.querySelectorAll('.related-attack').forEach((el) => el.classList.remove('related-attack'));
+    document.querySelectorAll('.related-defender').forEach((el) => el.classList.remove('related-defender'));
+    
+    highlights = {
+      attacks: new Set(),
+      defenders: new Set(),
+      matchups: new Set()
+    };
+  });
+  
+  function attackClicked(attack) {
+    let labelEl = document.querySelector(`#attacks .attack-${attack}`);
+    if (highlights.attacks.has(attack)) {
       // Already highlighted
       
       // Record highlight removal
-      highlights.attackers.delete(attacker);
+      highlights.attacks.delete(attack);
       labelEl.classList.remove('highlight');
       
       // Check if any matchups coincide with this label
       let matchupObj = Array.from(highlights.matchups)
-        .find((matchup) => matchup.attacker === attacker);
+        .find((matchup) => matchup.attack === attack);
       
       if (!matchupObj) {
-        // Remove related-attacker class from all related cells that aren't highlighted by a matchup
-        let cellsEl = document.querySelectorAll(`#grid .cell.attacker-${attacker}`);
+        // Remove related-attack class from all related cells that aren't highlighted by a matchup
+        let cellsEl = document.querySelectorAll(`#grid .attack-${attack}`);
         cellsEl.forEach((el) => {
-          el.classList.remove('related-attacker');
+          el.classList.remove('related-attack');
         });
       }
     } else {
       // Not highlighted yet
       
       // Record highlight
-      highlights.attackers.add(attacker);
+      highlights.attacks.add(attack);
       labelEl.classList.add('highlight');
       
-      // Add related-attacker class to all related cells
-      let cellsEl = document.querySelectorAll(`#grid .cell.attacker-${attacker}`);
+      // Add related-attack class to all related cells
+      let cellsEl = document.querySelectorAll(`#grid .attack-${attack}`);
       cellsEl.forEach((el) => {
-        el.classList.add('related-attacker');
+        el.classList.add('related-attack');
       });
     }
   }
 
   function defenderClicked(defender) {
-    let labelEl = document.querySelector(`#defenders .label.defender-${defender}`);
+    let labelEl = document.querySelector(`#defenders .defender-${defender}`);
     if (highlights.defenders.has(defender)) {
       // Already highlighted
       
@@ -360,7 +484,7 @@
       
       if (!matchupObj) {
         // Remove related-defender class from all related cells that aren't highlighted by a matchup
-        let cellsEl = document.querySelectorAll(`#grid .cell.defender-${defender}`);
+        let cellsEl = document.querySelectorAll(`#grid .defender-${defender}`);
         cellsEl.forEach((el) => {
           el.classList.remove('related-defender');
         });
@@ -373,19 +497,19 @@
       labelEl.classList.add('highlight');
       
       // Add related-defender class to all related cells
-      let cellsEl = document.querySelectorAll(`#grid .cell.defender-${defender}`);
+      let cellsEl = document.querySelectorAll(`#grid .defender-${defender}`);
       cellsEl.forEach((el) => {
         el.classList.add('related-defender');
       });
     }
   }
 
-  function matchupClicked(attacker, defender) {
-    let cellEl = document.querySelector(`#grid .cell.attacker-${attacker}.defender-${defender}`);
+  function matchupClicked(attack, defender) {
+    let cellEl = document.querySelector(`#grid .attack-${attack}.defender-${defender}`);
     
     // Need specific object reference for set removal
     let matchupObj = Array.from(highlights.matchups)
-      .find((matchup) => matchup.attacker === attacker && matchup.defender === defender);
+      .find((matchup) => matchup.attack === attack && matchup.defender === defender);
     
     if (matchupObj) {
       // Already highlighted
@@ -394,21 +518,21 @@
       highlights.matchups.delete(matchupObj);
       cellEl.classList.remove('highlight');
       
-      // Get a conflicting attacker matchup
-      let attackerMatchupObj = Array.from(highlights.matchups)
-        .find((matchup) => matchup.attacker === attacker);
+      // Get a conflicting attack matchup
+      let attackMatchupObj = Array.from(highlights.matchups)
+        .find((matchup) => matchup.attack === attack);
       
-      if (!attackerMatchupObj) {
-        // Remove related-attacker class from attacker label if another matchup doesn't match it
-        let labelEl = document.querySelector(`#attackers .label.attacker-${attacker}`);
-        labelEl.classList.remove('related-attacker');
+      if (!attackMatchupObj) {
+        // Remove related-attack class from attack label if another matchup doesn't match it
+        let labelEl = document.querySelector(`#attacks .attack-${attack}`);
+        labelEl.classList.remove('related-attack');
       }
       
-      if (!highlights.attackers.has(attacker) && !attackerMatchupObj) {
-        // Remove related-attacker class from all related cells that aren't highlighted by a matchup
-        let attackerCellsEl = document.querySelectorAll(`#grid .cell.attacker-${attacker}`);
-        attackerCellsEl.forEach((el) => {
-          el.classList.remove('related-attacker');
+      if (!highlights.attacks.has(attack) && !attackMatchupObj) {
+        // Remove related-attack class from all related cells that aren't highlighted by a matchup
+        let attackCellsEl = document.querySelectorAll(`#grid .attack-${attack}`);
+        attackCellsEl.forEach((el) => {
+          el.classList.remove('related-attack');
         });
       }
       
@@ -418,13 +542,13 @@
       
       if (!defenderMatchupObj) {
         // Remove related-defender class from defender label if another matchup doesn't match it
-        let labelEl = document.querySelector(`#defenders .label.defender-${defender}`);
+        let labelEl = document.querySelector(`#defenders .defender-${defender}`);
         labelEl.classList.remove('related-defender');
       }
       
       if (!highlights.defenders.has(defender) && !defenderMatchupObj) {
         // Remove related-defender class from all related cells that aren't highlighted by a matchup
-        let defenderCellsEl = document.querySelectorAll(`#grid .cell.defender-${defender}`);
+        let defenderCellsEl = document.querySelectorAll(`#grid .defender-${defender}`);
         defenderCellsEl.forEach((el) => {
           el.classList.remove('related-defender');
         });
@@ -433,236 +557,82 @@
       // Not highlighted yet
       cellEl.classList.add('highlight');
       
-      // Add related-attacker class to attacker label
-      let attackerLabelEl = document.querySelector(`#attackers .label.attacker-${attacker}`);
-      attackerLabelEl.classList.add('related-attacker');
+      // Add related-attack class to attack label
+      let attackLabelEl = document.querySelector(`#attacks .attack-${attack}`);
+      attackLabelEl.classList.add('related-attack');
       
-      // Add related-attacker class to all attacker related cells
-      let attackersEl = document.querySelectorAll(`#grid .cell.attacker-${attacker}:not(.defender-${defender}`);
-      attackersEl.forEach((el) => {
-        el.classList.add('related-attacker');
+      // Add related-attack class to all attack related cells
+      let attacksEl = document.querySelectorAll(`#grid .attack-${attack}:not(.defender-${defender}`);
+      attacksEl.forEach((el) => {
+        el.classList.add('related-attack');
       });
       
       // Add related-defender class to defender label
-      let defenderLabelEl = document.querySelector(`#defenders .label.defender-${defender}`);
+      let defenderLabelEl = document.querySelector(`#defenders .defender-${defender}`);
       defenderLabelEl.classList.add('related-defender');
       
       // Add related-defender class to all defender related cells
-      let defendersEl = document.querySelectorAll(`#grid .cell.defender-${defender}:not(.attacker-${attacker}`);
+      let defendersEl = document.querySelectorAll(`#grid .defender-${defender}:not(.attack-${attack}`);
       defendersEl.forEach((el) => {
         el.classList.add('related-defender');
       });
       
       // Record highlight
-      highlights.matchups.add({attacker: attacker, defender: defender});
+      highlights.matchups.add({attack: attack, defender: defender});
     }
   }
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  function generateDefenders() {
-    let elParent = document.querySelector('#defenders>.labels');
-
-    matchups.forEach((defender) => {
-      let classList = `label defender-${defender.type}`;
-      
-      let newCell = document.createElement('div');
-      newCell.className = classList;
-      newCell.innerHTML = defender.type;
-
-      newCell.addEventListener('mouseover', (e) => {
-        // lastHover = { defender: defender.type };
-
-        // if (!isHighlighting()) {
-        //   highlightRelated(null, defender.type);
-        // }
-      });
-
-      newCell.addEventListener('mouseout', (e) => {
-        // if (!isHighlighting()) {
-        //   unhighlightRelated();
-        // }
-      });
-
-      newCell.addEventListener('mousedown', (e) => defenderClicked(defender.type));
-
-      elParent.appendChild(newCell);
-    });
-  }
-
-  function generateAttackers() {
-    let elParent = document.querySelector('#attackers>.labels');
-
-    matchups.forEach((attacker) => {
-      let classList = `label attacker-${attacker.type}`;
-      
-      let newCell = document.createElement('div');
-      newCell.className = classList;
-      newCell.innerHTML = attacker.type;
-
-      newCell.addEventListener('mouseover', (e) => {
-        // lastHover = { attacker: attacker.type };
-
-        // if (!highlight) {
-        //   highlightRelated(attacker.type, null);
-        // }
-      });
-
-      newCell.addEventListener('mouseout', (e) => {
-        // if (!highlight) {
-        //   unhighlightRelated();
-        // }
-      });
-
-      newCell.addEventListener('mousedown', (e) => attackerClicked(attacker.type));
-
-      elParent.appendChild(newCell);
-    });
-  }
-
-  function generateGrid() {
-    let elParent = document.getElementById('grid');
-
-    matchups.forEach((attacker) => {
-      matchups.forEach((defender) => {
-        let classList = `attacker-${attacker.type} defender-${defender.type}`;
-
-        let newCell = document.createElement('div');
-        newCell.className = `cell ${classList}`;
-
-        if (defender.immuneTo.indexOf(attacker.type) > -1) {
-          newCell.innerHTML = '0x';
-          newCell.classList.add('immune');
-        } else if (defender.resistTo.indexOf(attacker.type) > -1) {
-          newCell.innerHTML = '1/2x';
-          newCell.classList.add('resist');
-        } else if (defender.weakTo.indexOf(attacker.type) > -1) {
-          newCell.innerHTML = '2x';
-          newCell.classList.add('weak');
-        } else {
-          newCell.classList.add('normal');
-        }
-
-        newCell.addEventListener('mouseover', (e) => {
-          // lastHover = { attacker: attacker.type, defender: defender.type };
-
-          // if (!highlight) {
-          //   highlightRelated(attacker.type, defender.type);
-          // }
-        });
-
-        newCell.addEventListener('mouseout', (e) => {
-          // if (!highlight) {
-          //   unhighlightRelated();
-          // }
-        });
-
-        newCell.addEventListener('mousedown', (e) => matchupClicked(attacker.type, defender.type));
-
-        elParent.appendChild(newCell);
-      });
-    });
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  function generateSelectors(attacker, defender) {
-    let selector;
-    let sourceSelector;
-
-    if (attacker && defender) {
-      selector = `.attacker-${attacker}, .defender-${defender}`;
-      sourceSelector = `.attacker-${attacker}.defender-${defender}`;
-    } else if (attacker) {
-      selector = `.attacker-${attacker}`;
-      sourceSelector = `.label.attacker-${attacker}`;
-    } else if (defender) {
-      selector = `.defender-${defender}`;
-      sourceSelector = `.label.defender-${defender}`;
-    } else {
-      return null;
-    }
-
-    return { selector, sourceSelector };
-  }
-
-  function highlightRelated(attacker, defender) {
-    let { selector, sourceSelector } = generateSelectors(attacker, defender);
-
-    let matching = document.querySelectorAll(selector);
-    matching.forEach((el) => {
-      el.classList.add('related');
-    });
-
-    let sourceMatch = document.querySelector(sourceSelector);
-    sourceMatch.classList.remove('related');
-    sourceMatch.classList.add('selected');
-  }
-
-  function unhighlightRelated() {
-    let matching = document.querySelectorAll('.related, .selected');
-    matching.forEach((el) => {
-      el.classList.remove('related', 'selected');
-    });
-  }
-
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    document.querySelectorAll('.highlight').forEach((el) => el.classList.remove('highlight'));
-    document.querySelectorAll('.related-attacker').forEach((el) => el.classList.remove('related-attacker'));
-    document.querySelectorAll('.related-defender').forEach((el) => el.classList.remove('related-defender'));
+  /* Hovering */
+  function attackHovered(attack) {
+    // Highlight the label
+    let labelEl = document.querySelector(`#attacks .attack-${attack}`);
+    labelEl.classList.add('hovered');
     
-    highlights = {
-      attackers: new Set(),
-      defenders: new Set(),
-      matchups: new Set()
-    };
-  });
+    // Highlight the related cells
+    let cellsEl = document.querySelectorAll(`#grid .attack-${attack}`);
+      cellsEl.forEach((el) => {
+        el.classList.add('hovered-related-attack');
+      });
+  }
   
+  function defenderHovered(defender) {
+    // Highlight the label
+    let labelEl = document.querySelector(`#defenders .defender-${defender}`);
+    labelEl.classList.add('hovered');
+    
+    // Highlight the related cells
+    let cellsEl = document.querySelectorAll(`#grid .defender-${defender}`);
+      cellsEl.forEach((el) => {
+        el.classList.add('hovered-related-defender');
+      });
+  }
+  
+  function matchupHovered(attack, defender) {
+    // Highlight the label
+    let cellEl = document.querySelector(`#grid .attack-${attack}.defender-${defender}`);
+    cellEl.classList.add('hovered');
+    
+    // Highlight the attack related cells
+    let attackerCellsEl = document.querySelectorAll(`#grid .attack-${attack}`);
+      attackerCellsEl.forEach((el) => {
+        el.classList.add('hovered-related-attack');
+      });
+    
+    // Highlight the defender related cells
+    let defenderCellsEl = document.querySelectorAll(`#grid .defender-${defender}`);
+    defenderCellsEl.forEach((el) => {
+      el.classList.add('hovered-related-defender');
+    });
+  }
+  
+  /* Unhovering */
+  function elementUnhovered() {
+    document.querySelectorAll('.hovered').forEach((el) => el.classList.remove('hovered'));
+    document.querySelectorAll('.hovered-related-attack')
+      .forEach((el) => el.classList.remove('hovered-related-attack'));
+    document.querySelectorAll('.hovered-related-defender')
+      .forEach((el) => el.classList.remove('hovered-related-defender'));
+  }
   </script>
 </head>
 
@@ -680,21 +650,21 @@
         <div class="header"><span>Defender</span><span>Defender</span></div>
         <div class="labels">
           <script type="text/javascript">
-          generateDefenders();
+            generateDefenders();
           </script>
         </div>
       </div>
-      <div id="attackers">
-        <div class="header"><span>Attacker</span><span>Attacker</span></div>
+      <div id="attacks">
+        <div class="header"><span>Attack</span><span>Attack</span></div>
         <div class="labels">
           <script type="text/javascript">
-          generateAttackers();
+            generateAttacks();
           </script>
         </div>
       </div>
       <div id="grid">
         <script type="text/javascript">
-        generateGrid();
+          generateGrid();
         </script>
       </div>
     </div>
